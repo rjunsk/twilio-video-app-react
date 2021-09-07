@@ -73,7 +73,7 @@
   },
   "scripts": {
     "start": "concurrently npm:server npm:dev",
-    "dev": "react-scripts start",
+    "dev": "HTTPS=true SSL_CRT_FILE=../localhost.pem SSL_KEY_FILE=../localhost-key.pem DANGEROUSLY_DISABLE_HOST_CHECK=true react-scripts start",
     "build": "node ./scripts/build.js",
     "test": "cross-env TZ=utc jest",
     "eject": "react-scripts eject",

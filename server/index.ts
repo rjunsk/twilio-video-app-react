@@ -4,6 +4,11 @@ import express, { RequestHandler } from 'express';
 import cors from 'cors';
 import path from 'path';
 import { ServerlessFunction } from './types';
+const fs = require("fs");
+const options = {
+	key: fs.readFileSync('../localhost-key.pem'),
+	cert: fs.readFileSync('../localhost.pem'),
+};
 
 const PORT = process.env.PORT ?? 8081;
 
@@ -45,4 +50,6 @@ app.get('*', (_, res) => {
   res.sendFile(path.join(__dirname, '../build/index.html'));
 });
 
-app.listen(PORT, () => console.log(`twilio-video-app-react server running on ${PORT}`));
+const httpServer = require("https").createServer(options, app);
+
+httpServer.listen(PORT, () => console.log(`twilio-video-app-react server running on ${PORT}`));
