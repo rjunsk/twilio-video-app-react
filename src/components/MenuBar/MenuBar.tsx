@@ -11,6 +11,7 @@ import { Typography, Grid, Hidden } from '@material-ui/core';
 import ToggleAudioButton from '../Buttons/ToggleAudioButton/ToggleAudioButton';
 import ToggleChatButton from '../Buttons/ToggleChatButton/ToggleChatButton';
 import ToggleVideoButton from '../Buttons/ToggleVideoButton/ToggleVideoButton';
+import ToggleCaptionButton from '../Buttons/ToggleCaptionButton/ToggleCaptionButton';
 import ToggleScreenShareButton from '../Buttons/ToogleScreenShareButton/ToggleScreenShareButton';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -90,6 +91,7 @@ export default function MenuBar() {
               <ToggleVideoButton disabled={isReconnecting} />
               {!isSharingScreen && !isMobile && <ToggleScreenShareButton disabled={isReconnecting} />}
               {process.env.REACT_APP_DISABLE_TWILIO_CONVERSATIONS !== 'true' && <ToggleChatButton />}
+              <ToggleCaptionButton disabled={isReconnecting} />
               <Menu />
             </Grid>
           </Grid>
