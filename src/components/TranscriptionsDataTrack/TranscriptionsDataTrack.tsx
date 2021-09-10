@@ -1,84 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import useParticipants from '../../hooks/useParticipants/useParticipants';
+import { useCallback, useEffect } from 'react';
+import useCaptionContext from '../../hooks/useCaptionContext/useCaptionContext';
 
-type onMessage = { participantId: string; identity: string; data: { transcript: string; isFinal: boolean } };
-
-type Transcription = {
-  timestamp: number;
-  participantSid: string;
+type iMessage = {
+  data: {
+    isFinal: boolean;
+    transcript: string;
+  };
   identity: string;
-  isFinal: boolean;
-  transcript: string;
+  participantId: string;
 };
 
 export default function TranscriptionsDataTrack({ track }: { track: any }) {
-  const [transcriptions, setTranscriptions] = useState<Transcription[]>([]);
-  const participants = useParticipants();
-  console.log(participants);
-  useEffect(() => {
-    track.on('message', (message: string) => {
-      console.log(message);
-      setTranscriptions(state => {
-        const {
-          participantId,
-          identity,
-          data: { transcript, isFinal },
-        } = JSON.parse(message) as onMessage;
-        const index = state.findIndex(
-          transcription => transcription.participantSid === participantId && transcription.isFinal === false
-        );
-        if (index !== -1) {
-          state[index] = {
-            ...state[index],
-            transcript,
-            isFinal,
-          };
-        } else {
-          state?.push({
-            timestamp: new Date().getTime(),
-            participantSid: participantId,
-            identity,
-            isFinal,
-            transcript,
-          });
-        }
+  const { addMessages } = useCaptionContext();
 
-        return [...state];
+  const onMessage = useCallback(
+    (message: string) => {
+      const transcription = JSON.parse(message) as iMessage;
+
+      addMessages({
+        author: transcription.identity,
+        type: 'text',
+        sid: new Date().getTime(),
+        dateCreated: new Date(),
+        body: transcription.data.transcript,
+        isFinal: transcription.data.isFinal,
       });
-    });
+    },
+    [addMessages]
+  );
+
+  useEffect(() => {
+    // NOTE: instead of pushing to the provider the messages, we should
+    // find the participant which has the localDataTrack and subscribe it there
+    track.on('message', onMessage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [track]);
 
-  console.log(transcriptions);
-
-  return (
-    <pre style={{ position: 'absolute', zIndex: 1, color: 'white', bottom: 1, marginLeft: '5px' }}>
-      {transcriptions.map(transcription => `(${transcription.identity}): ${transcription.transcript}\n`)}
-    </pre>
-  );
+  return null;
 }
-
-// {participantSid} dijo tal \n
-// {participantSid} aquello eso cwha \n
-
-// [
-//   'ricardo', [['frases finales', 'luego he dixo'], ['hola', 'hola que tal', 'hola que tal ricardo']],
-//   'tomeu', [[], []]
-// ]
-
-// luego he dixo [F]
-// hola que tal ricardo [F]
-
-// [
-//   {
-//     timestamp,
-//     participantName,
-//     final,
-//     transcript: hola que tal
-//   },
-//   {
-//     timestamp,
-//     participantName,
-//     final,
-//     transcript: hola que tal
-//   }
-// ]
