@@ -6,6 +6,7 @@ export type TranscriptionMessage = {
   dateCreated: Date;
   body: string;
   isFinal: boolean;
+  messageId: string;
 };
 
 type CaptionContextType = {

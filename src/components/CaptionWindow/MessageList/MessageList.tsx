@@ -19,14 +19,10 @@ export default function MessageList({ messages }: MessageListProps) {
   return (
     <MessageListScrollContainer messages={messages}>
       {messages
-        .filter(message => message.isFinal)
-        .filter(
-          // Some message are repeated, we don't why but we are filtering them
-          (value, index, array) =>
-            array.findIndex(
-              transcription => transcription.body === value.body && transcription.author === value.author
-            ) === index
-        )
+        .filter((message, index, array) => {
+          // get the last message from messageId group
+          return array.map(msg => msg.messageId).lastIndexOf(message.messageId) === index;
+        })
         .map((message, idx) => {
           const time = getFormattedTime(message)!;
           const previousTime = getFormattedTime(messages[idx - 1]);

@@ -8,6 +8,7 @@ type TranscriptionMessage = {
   };
   identity: string;
   participantId: string;
+  messageId: string;
 };
 
 export default function TranscriptionsDataTrack({ track }: { track: any }) {
@@ -18,6 +19,7 @@ export default function TranscriptionsDataTrack({ track }: { track: any }) {
       const transcription = JSON.parse(message) as TranscriptionMessage;
 
       addMessages({
+        messageId: transcription.messageId,
         author: transcription.identity,
         sid: `${new Date().getTime()}`,
         dateCreated: new Date(),
