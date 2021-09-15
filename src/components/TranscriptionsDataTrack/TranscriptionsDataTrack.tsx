@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import useCaptionContext from '../../hooks/useCaptionContext/useCaptionContext';
 
-type iMessage = {
+type TranscriptionMessage = {
   data: {
     isFinal: boolean;
     transcript: string;
@@ -15,12 +15,11 @@ export default function TranscriptionsDataTrack({ track }: { track: any }) {
 
   const onMessage = useCallback(
     (message: string) => {
-      const transcription = JSON.parse(message) as iMessage;
+      const transcription = JSON.parse(message) as TranscriptionMessage;
 
       addMessages({
         author: transcription.identity,
-        type: 'text',
-        sid: new Date().getTime(),
+        sid: `${new Date().getTime()}`,
         dateCreated: new Date(),
         body: transcription.data.transcript,
         isFinal: transcription.data.isFinal,

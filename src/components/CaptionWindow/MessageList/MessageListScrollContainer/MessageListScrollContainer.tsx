@@ -3,9 +3,9 @@ import React from 'react';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
-import { Message } from '@twilio/conversations/lib/message';
 import throttle from 'lodash.throttle';
 import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
+import { TranscriptionMessage } from '../../../CaptionProvider';
 
 const styles = createStyles({
   outerContainer: {
@@ -42,7 +42,7 @@ const styles = createStyles({
 });
 
 interface MessageListScrollContainerProps extends WithStyles<typeof styles> {
-  messages: Message[];
+  messages: TranscriptionMessage[];
 }
 
 interface MessageListScrollContainerState {

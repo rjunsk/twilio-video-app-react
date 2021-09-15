@@ -1,8 +1,7 @@
 import React from 'react';
-import { Message } from '@twilio/conversations/lib/message';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import CaptionWindowHeader from './ChatWindowHeader/ChatWindowHeader';
+import CaptionWindowHeader from './CaptionWindowHeader/CaptionWindowHeader';
 import MessageList from './MessageList/MessageList';
 import useCaptionContext from '../../hooks/useCaptionContext/useCaptionContext';
 
@@ -29,10 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// In this component, we are toggling the visibility of the ChatWindow with CSS instead of
-// conditionally rendering the component in the DOM. This is done so that the ChatWindow is
-// not unmounted while a file upload is in progress.
-
 export default function CaptionWindow() {
   const classes = useStyles();
   const { isCaptionWindowOpen, messages } = useCaptionContext();
@@ -41,7 +36,6 @@ export default function CaptionWindow() {
     <aside className={clsx(classes.captionWindowContainer, { [classes.hide]: !isCaptionWindowOpen })}>
       <CaptionWindowHeader />
       <MessageList messages={messages} />
-      {/* <ChatInput conversation={conversation!} isChatWindowOpen={isChatWindowOpen} /> */}
     </aside>
   );
 }

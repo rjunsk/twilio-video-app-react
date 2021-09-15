@@ -1,7 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Link } from '@material-ui/core';
-import linkify from 'linkify-it';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -26,28 +24,6 @@ interface TextMessageProps {
   isLocalParticipant: boolean;
 }
 
-function addLinks(text: string) {
-  const matches = linkify().match(text);
-  if (!matches) return text;
-
-  const results = [];
-  let lastIndex = 0;
-
-  matches.forEach((match, i) => {
-    results.push(text.slice(lastIndex, match.index));
-    results.push(
-      <Link target="_blank" rel="noreferrer" href={match.url} key={i}>
-        {match.text}
-      </Link>
-    );
-    lastIndex = match.lastIndex;
-  });
-
-  results.push(text.slice(lastIndex, text.length));
-
-  return results;
-}
-
 export default function TextMessage({ body, isLocalParticipant }: TextMessageProps) {
   const classes = useStyles();
 
@@ -58,7 +34,7 @@ export default function TextMessage({ body, isLocalParticipant }: TextMessagePro
           [classes.isLocalParticipant]: isLocalParticipant,
         })}
       >
-        <div>{addLinks(body)}</div>
+        <div>{body}</div>
       </div>
     </div>
   );
