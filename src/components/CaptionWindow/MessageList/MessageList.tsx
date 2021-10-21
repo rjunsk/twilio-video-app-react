@@ -15,13 +15,14 @@ const getFormattedTime = (message?: TranscriptionMessage) =>
 export default function MessageList({ messages }: MessageListProps) {
   const { room } = useVideoContext();
   const localParticipant = room!.localParticipant;
+  const messageIds = messages.map(message => message.messageId);
 
   return (
     <MessageListScrollContainer messages={messages}>
       {messages
         .filter((message, index, array) => {
-          // get the last message from messageId group
-          return array.map(msg => msg.messageId).lastIndexOf(message.messageId) === index;
+          // show only last message id
+          return index === messageIds.lastIndexOf(message.messageId);
         })
         .map((message, idx) => {
           const time = getFormattedTime(message)!;
