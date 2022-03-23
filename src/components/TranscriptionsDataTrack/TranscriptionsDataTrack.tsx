@@ -18,7 +18,7 @@ export default function TranscriptionsDataTrack({ track }: { track: any }) {
     (message: string) => {
       const transcription = JSON.parse(message);
       if (transcription.transcriptionResponse.TranscriptEvent.Transcript.Results.length) {
-        const isFinal = transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].isPartial;
+        const isFinal = !transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].isPartial;
         const transcript =
           transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].Alternatives[0].Transcript;
 
