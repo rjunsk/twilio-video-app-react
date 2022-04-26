@@ -22,6 +22,7 @@ export const CaptionProvider: React.FC = ({ children }) => {
   const [isCaptionWindowOpen, setIsCaptionWindowpen] = useState(false);
   const [messages, setMessages] = useState<TranscriptionMessage[]>([]);
   const addMessages = useCallback((transcription: TranscriptionMessage) => {
+    console.log(transcription);
     setMessages(transcriptions => transcriptions.concat(transcription));
   }, []);
   const toggleCaptionWindow = useCallback(() => setIsCaptionWindowpen(!isCaptionWindowOpen), [isCaptionWindowOpen]);

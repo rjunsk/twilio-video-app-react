@@ -18,13 +18,14 @@ export default function TranscriptionsDataTrack({ track }: { track: any }) {
     (message: string) => {
       const transcription = JSON.parse(message);
       if (transcription.transcriptionResponse.TranscriptEvent.Transcript.Results.length) {
-        const isFinal = !transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].isPartial;
+        const isFinal = !transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].IsPartial;
         const transcript =
           transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].Alternatives[0].Transcript;
+        const resultId = transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].ResultId;
 
         addMessages({
-          messageId: transcription.messageId,
-          author: transcription.identity,
+          messageId: resultId,
+          author: transcription?.transcriptionResponse?.identity,
           sid: `${new Date().getTime()}`,
           dateCreated: new Date(),
           body: transcript,
