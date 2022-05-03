@@ -5,7 +5,7 @@ export type TranscriptionMessage = {
   sid: string;
   dateCreated: Date;
   body: string;
-  isFinal: boolean;
+  // isFinal: boolean;
   messageId: string;
 };
 

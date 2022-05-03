@@ -18,18 +18,28 @@ export default function TranscriptionsDataTrack({ track }: { track: any }) {
     (message: string) => {
       const transcription = JSON.parse(message);
       if (transcription.transcriptionResponse.TranscriptEvent.Transcript.Results.length) {
-        const isFinal = !transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].IsPartial;
-        const transcript =
-          transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].Alternatives[0].Transcript;
+        const items = transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].Alternatives[0].Items;
         const resultId = transcription.transcriptionResponse.TranscriptEvent.Transcript.Results[0].ResultId;
+        const messagesBySpeaker = items.reduce((acc: any, item: any) => {
+          if (!acc[item.Identity]) {
+            acc[item.Identity] = {
+              author: item.Identity,
+              messageId: `${resultId}-${item.Identity}`,
+              body: null,
+            };
+          }
 
-        addMessages({
-          messageId: resultId,
-          author: transcription?.transcriptionResponse?.identity,
-          sid: `${new Date().getTime()}`,
-          dateCreated: new Date(),
-          body: transcript,
-          isFinal,
+          acc[item.Identity].body = !acc[item.Identity].body
+            ? `${item.Content}`
+            : `${acc[item.Identity].body}${item.Content === '.' ? `${item.Content}` : ` ${item.Content}`}`;
+
+          return acc;
+        }, {});
+
+        Object.keys(messagesBySpeaker).forEach(identity => {
+          const payload = { ...messagesBySpeaker[identity], sid: `${new Date().getTime()}`, dateCreated: new Date() };
+
+          addMessages(payload);
         });
       }
     },
